@@ -1,0 +1,122 @@
+Fetching Equities data for interval: 01/01/2016 - 12/31/2017
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 01/01/2016 - 12/31/2017
+Time to completion:88.00704312324524
+Max Sharpe Ratio: 2.3671914894681887 for Portofolio ['ARGX.BR', 'BAR.BR', 'SOF.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.19692518 0.17949122 0.1520442  0.45170043 0.01983898]
+Volatility: 0.17178156243122653 and return: 0.43663985263474775
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 02/01/2016 - 01/31/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 02/01/2016 - 01/31/2018
+Time to completion:80.86487364768982
+Max Sharpe Ratio: 2.9637643693387257 for Portofolio ['ARGX.BR', 'BAR.BR', 'SOF.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.13940681 0.1827292  0.244168   0.34852293 0.08517306]
+Volatility: 0.13989130223989424 and return: 0.4446048571589932
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 03/01/2016 - 02/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 03/01/2016 - 02/28/2018
+Time to completion:81.33389377593994
+Max Sharpe Ratio: 2.72550322539406 for Portofolio ['ARGX.BR', 'BAR.BR', 'GLPG.AS', 'SOF.BR', 'UMI.BR'] with respectively weights [0.16557921 0.13992887 0.10276259 0.29962868 0.29210065]
+Volatility: 0.15076204735134324 and return: 0.44090244632309805
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 04/01/2016 - 03/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 04/01/2016 - 03/28/2018
+Time to completion:81.90571665763855
+Max Sharpe Ratio: 2.6227218216709347 for Portofolio ['ARGX.BR', 'BAR.BR', 'GLPG.AS', 'UMI.BR', 'WDP.BR'] with respectively weights [0.1882395  0.18093412 0.15226366 0.34923404 0.12932869]
+Volatility: 0.16963293078080743 and return: 0.47489998923281884
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 05/01/2016 - 04/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 05/01/2016 - 04/28/2018
+Time to completion:81.41982626914978
+Max Sharpe Ratio: 2.6007952500575127 for Portofolio ['ARGX.BR', 'BAR.BR', 'GLPG.AS', 'UMI.BR', 'WDP.BR'] with respectively weights [0.17811593 0.2832041  0.05480421 0.29777201 0.18610375]
+Volatility: 0.16127659007061693 and return: 0.44944738940113316
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 06/01/2016 - 05/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 06/01/2016 - 05/28/2018
+Time to completion:81.8533821105957
+Max Sharpe Ratio: 2.612171245169371 for Portofolio ['ARGX.BR', 'BAR.BR', 'GLPG.AS', 'UMI.BR', 'WDP.BR'] with respectively weights [0.21547812 0.24058326 0.04682173 0.3492419  0.14787499]
+Volatility: 0.17744818276316196 and return: 0.49352504052149093
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 07/01/2016 - 06/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 07/01/2016 - 06/28/2018
+Time to completion:83.32369756698608
+Max Sharpe Ratio: 2.685371443479537 for Portofolio ['ARGX.BR', 'BAR.BR', 'KBC.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.15617833 0.21199801 0.14522636 0.2535481  0.23304919]
+Volatility: 0.1432797780675612 and return: 0.4147594244507145
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 08/01/2016 - 07/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 08/01/2016 - 07/28/2018
+Time to completion:79.1022834777832
+Max Sharpe Ratio: 2.740529981881666 for Portofolio ['ARGX.BR', 'BAR.BR', 'KBC.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.15673496 0.21906241 0.12996455 0.25417634 0.24006175]
+Volatility: 0.14126416131840694 and return: 0.4171386694584625
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 09/01/2016 - 08/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 09/01/2016 - 08/28/2018
+Time to completion:77.64334464073181
+Max Sharpe Ratio: 2.579476001245823 for Portofolio ['ARGX.BR', 'BAR.BR', 'SOF.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.13683592 0.11925678 0.25589728 0.15185319 0.33615683]
+Volatility: 0.12027856999074142 and return: 0.34025568475528356
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 10/01/2016 - 09/28/2018
+Collected 8568 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 10/01/2016 - 09/28/2018
+Time to completion:81.54007053375244
+Max Sharpe Ratio: 2.297826226016423 for Portofolio ['ARGX.BR', 'BAR.BR', 'SOF.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.12647921 0.1903322  0.26167643 0.15096605 0.27054611]
+Volatility: 0.1199016668040263 and return: 0.3055131945253744
+----------------------------------------------------------------
+----------------------------------------------------------------
+Fetching Equities data for interval: 11/01/2016 - 10/28/2018
+Collected 6188 portfolio combinations to optimize...
+Waiting for data to be processed by our multiprocessing system...
+----------------------------------------------------------------
+----------------------------------------------------------------
+Training data interval: 11/01/2016 - 10/28/2018
+Time to completion:70.6107497215271
+Max Sharpe Ratio: 2.101833838730152 for Portofolio ['ARGX.BR', 'BAR.BR', 'SOF.BR', 'UMI.BR', 'WDP.BR'] with respectively weights [0.15830318 0.10410807 0.25378761 0.09402037 0.38978076]
+Volatility: 0.13280207237008448 and return: 0.3091278895609342
+----------------------------------------------------------------
+----------------------------------------------------------------
+Time to full completion:0:14:47.617324

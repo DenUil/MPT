@@ -8,11 +8,11 @@ import pandas as pd
 from datetime import datetime
 import os
 import itertools
+import _thread
 
 
 
-
-def sharpeRatio_org(weights,returns_annual, conv_annual):
+def sharpeRatio_org(weights,returns_annual, cov_annual):
     returns = np.dot(weights, returns_annual)
     volatility = np.sqrt(np.dot(weights.T, np.dot(cov_annual, weights)))
     sharpe = (returns -0.03)/ volatility
@@ -32,6 +32,8 @@ def constraint2(weights, *args):
     returns_annual, cov_annual = args[0], args[1]
     returns = np.dot(weights, returns_annual)
     return 1/returns
+
+
 
 # <editor-fold desc="data procurement">
 symbolsBE=["ABI.BR","ABO.BR","ACCB.BR","ACKB.BR","AED.BR","AGS.BR","AGFB.BR","ANT.BR","ARGX.BR","ASC.BR","ASIT.BR","GEN.BR","ATEB.BR","BALTA.BR","BBV.BR","SANTA.BR","BANI.BR","BAR.BR","BAS.BR","BEAB.BR","BEFB.BR","BEKB.BR","BELR.BR","BELU.BR","BCART.BR","BOEI.BR","BOTHE.BR","BPOST.BR","BNB.BR","BREB.BR","CAMB.BR","CAND.BR","CPINV.BR","CYAD.BR","CENER.BR","CFEB.BR","CHTEX.BR","COMB.BR","CIS.BR","COBH.BR","COFB.BR","COFP2.BR","COLR.BR","CONN.BR","OPTI.BR","DIE.BR","DECB.BR","DTEL.BR","DEXB.BR","DIEG.BR","DISL.BR","EON.BR","ECONB.BR","ELI.BR","ALEMK.BR","ENI.BR","EURN.BR","ALPBS.BR","ALEVA.BR","EVS.BR","EXM.BR","FAGR.BR","FLEX.BR","FLOB.BR","FLUX.BR","FNG.BR","FOU.BR","GBLB.BR","GENK.BR","GIMB.BR","GLOG.BR","GREEN.BR","GROWN.BR","HAMO.BR","HOMI.BR","IBAB.BR","IEP.BR","MCC.BR","IMMOU.BR","IMMO.BR","INCO.BR","INTO.BR","JEN.BR","KBC.BR","KBCA.BR","KEYW.BR","KIN.BR","LEAS.BR","LOTB.BR","LUXA.BR","MDXH.BR","MELE.BR","MSF.BR","MIKO.BR","MITRA.BR","MONT.BR","MOP.BR","MOUR.BR","MEURV.BR","NEU.BR","NEWT.BR","NYR.BR","ONTEX.BR","OBEL.BR","OXUR.BR","PAY.BR","PIC.BR","PROX.BR","QRF.BR","QFG.BR","REC.BR","REI.BR","RES.BR","RET.BR","ENGB.BR","ROU.BR","SAB.BR","SCHD.BR","SEQUA.BR","SHUR.BR","SIA.BR","SIOE.BR","SIP.BR","SMAR.BR","SOF.BR","SOFT.BR","SOLV.BR","SOLB.BR","SPA.BR","SUCR.BR","TIT.BR","TFA.BR","TNET.BR","TERB.BR","TESB.BR","TEXF.BR","TINC.BR","TISN.BR","TUB.BR","UNI.BR","PNSB.BR","UCB.BR","UMI.BR","VAN.BR","VASTB.BR","VGP.BR","VIO.BR","VWA.BR","VWAP.BR","WEB.BR","WDP.BR","WEHB.BR","WOLE.BR","WOLS.BR","XIOR.BR","ZENT.BR","ZEN.BR"]
@@ -64,7 +66,6 @@ else:
     table = pd.read_pickle("yahooDataSet.pkl")
 
 table.columns=table.columns.droplevel()
-print(table)
 symbolCombinations = itertools.combinations(table.columns,5)
 #numberOfCombinations = sum(1 for _ in symbolCombinations)
 #print("Number of combinations: {}".format(numberOfCombinations))
