@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     numberOfMonthsPerExpands = 12
     numberOfExpandsPerYear = 12/numberOfMonthsPerExpands
-    for _ in range(0,numberOfExpandsPerYear):
+    for it in range(0,numberOfExpandsPerYear):
 
         startTrainingData = start.strftime("%m/%d/%Y")
         endTrainingData = end.strftime("%m/%d/%Y")
