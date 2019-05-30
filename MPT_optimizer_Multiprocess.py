@@ -81,6 +81,7 @@ def minimizerThread(q, threadIndex):
 
 if __name__ == "__main__":
     globalStopWatchStart = datetime.now()
+    prevOptPortfolio = None
     SymbolsByMonth=[]
     WeightsByMonth=[]
     #Definitions
@@ -119,27 +120,10 @@ if __name__ == "__main__":
 
     #Fetch data
     table = None
-    # if not os.path.isfile('yahooDataSet.pkl'):
-    #     datasets = []
-    #     for symbol in symbols:
-    #         print("Fetching data for {}".format(symbol))
-    #         try:
-    #             f = web.DataReader(symbol, 'yahoo', start, end)
-    #             f['ticker'] = np.full(f['Adj Close'].count(), symbol)
-    #             f = f.drop(["High", "Low", "Open", "Volume", "Close"], axis=1)
-    #             print("Fetched {}".format(f.shape))
-    #             if f['Adj Close'].count() >= 500:
-    #                 datasets.append(f)
-    #         except:
-    #             print("Error:{}".format(symbol))
-    #     data = pd.concat(datasets)
-    #     table = data.pivot(columns='ticker')
-    #     table.to_pickle("yahooDataSet.pkl")
-    # else:
-    #     table = pd.read_pickle("yahooDataSet.pkl")
 
-
-    for i in range(0,3):
+    numberOfMonthsPerExpands = 12
+    numberOfExpandsPerYear = 12/numberOfMonthsPerExpands
+    for _ in range(0,numberOfExpandsPerYear):
 
         startTrainingData = start.strftime("%m/%d/%Y")
         endTrainingData = end.strftime("%m/%d/%Y")
@@ -152,23 +136,21 @@ if __name__ == "__main__":
         datasets = []
         print("Fetching Equities data for interval: {} - {}".format(startTrainingData,endTrainingData))
         for symbol in symbols:
-           # print("Fetching data for {}".format(symbol))
             try:
                 f = web.DataReader(symbol, 'yahoo', start, end)
                 f['ticker'] = np.full(f['Adj Close'].count(), symbol)
                 f = f.drop(["High", "Low", "Open", "Volume", "Close"], axis=1)
-                #print("Shape of data {}".format(f.shape))
                 if f['Adj Close'].count() >= 1250:
                     datasets.append(f)
                 else:
                     print("{} Failed, not enough datapoints {}".format(symbol,f['Adj Close'].count()))
             except:
-                #print("Error:{}".format(symbol))
                 pass
         data = pd.concat(datasets)
         table = data.pivot(columns='ticker')
         table.to_pickle("yahooDataSet.pkl")
         table.columns = table.columns.droplevel()
+        #dealing with NaN situation
         table.fillna(method='ffill')
         table.fillna(method='bfill')
 
@@ -226,6 +208,34 @@ if __name__ == "__main__":
         try:
             optimalPortfolio = max(resultListClean,key=itemgetter(4))
             optPortTickers, optPortFinalWeights, optPortReturns, optPortVolatility, optPortSharpe = optimalPortfolio
+            # compare how previous optimal portfolio does with current dataset
+            if prevOptPortfolio == None:  # this is the first portfolio optimalisation
+                prevOptPortfolio = (optPortTickers, optPortFinalWeights)
+                prevOptPortTickers, prevOptPortFinalWeights = None, None
+            else:
+                # recalculate previous portfolio with current trainingset
+                prevOptPortTickers, prevOptPortFinalWeights = prevOptPortfolio
+                cIndex = []
+                for co in prevOptPortTickers:
+                    cIndex.append(table.columns.get_loc(co))
+                # Create a subset of the training data that just has the equities in the combination
+                newTable = table.iloc[:, cIndex]
+                num_assets = len(prevOptPortTickers)
+                # calculate daily and annual returns of the stocks
+                returns_daily = newTable.pct_change()
+                returns_annual = returns_daily.mean() * 250
+
+                # get daily and covariance of returns of the stock
+                cov_daily = returns_daily.cov()
+                cov_annual = cov_daily * 250
+
+                # calculate returns volatility sharpe ratio
+                prevReturns = np.dot(prevOptPortFinalWeights, returns_annual)
+                prevVolatility = np.sqrt(np.dot(prevOptPortFinalWeights.T, np.dot(cov_annual, prevOptPortFinalWeights)))
+                prevSharpe = (prevReturns - 0.03) / prevVolatility
+
+                # store current portfolio for comparison next run
+                prevOptPortfolio = (optPortTickers, optPortFinalWeights)
         except:
             print(resultList.index(None))
         endStopWatch = time.time()
@@ -239,13 +249,19 @@ if __name__ == "__main__":
 
         print("Max Sharpe Ratio: {} for Portofolio {} with respectively weights {}".format(optPortSharpe,optPortTickers,optPortFinalWeights))
         print("Volatility: {} and return: {}".format(optPortVolatility,optPortReturns))
+        if prevOptPortTickers != None:
+            print("Previous portfolio gave us:")
+            print(
+                "Max Sharpe Ratio: {} for Portofolio {} with respectively weights {}".format(prevSharpe,
+                                                                                             prevOptPortTickers,
+                                                                                             prevOptPortFinalWeights))
+            print("Volatility: {} and return: {}".format(prevVolatility, prevReturns))
         print("----------------------------------------------------------------")
         print("----------------------------------------------------------------")
         SymbolsByMonth.append(optPortTickers)
         WeightsByMonth.append(optPortFinalWeights.tolist())
-        # shift dataframe with one
-        #start = start + relativedelta(months=+1)
-        end = end  + relativedelta(months=+4)
+        # Expend dataframe with one
+        end = end  + relativedelta(months=numberOfMonthsPerExpands)
 
     globalStopWatchEnd = datetime.now()
     print("Time to full completion:{}".format(globalStopWatchEnd-globalStopWatchStart))
