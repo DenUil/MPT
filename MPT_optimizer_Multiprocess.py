@@ -109,7 +109,8 @@ if __name__ == "__main__":
                     "INGA.AMS", "KBC.BR", "ONTEX.BR", "PROX.BR", "SOF.BR", "SOLB.BR", "TNET.BR", "UCB.BR", "UMI.BR",
                     "WDP.BR"]
 
-    symbols = symbolsBEL20
+    symbolsSET50 = ['SUPER.BK','TRITN.BK','TPIPL.BK','MAX.BK','NUSA.BK','TFG.BK','EVER.BK','AQUA.BK','PF.BK','BLAND.BK','EFORL.BK','SIRI.BK','JSP.BK','BEM.BK','UPA.BK','KTC.BK','JAS.BK','PSTC.BK','CGD.BK','ML.BK','GEL.BK','MACO.BK','WHA.BK','RML.BK','RWI.BK','NMG.BK','TMB.BK','ACC.BK','SGP.BK','TRUE.BK','IRPC.BK','QH.BK','IEC.BK','RS.BK','TWZ.BK','T.BK','GUNKUL.BK','ORI.BK','CHG.BK','ANAN.BK','BSM.BK','TRC.BK','CHO.BK','SPALI.BK','BWG.BK','ITD.BK','TPIPP.BK','NEWS.BK','STPI.BK','NWR.BK']
+    symbols = symbolsSET50
 
     #start and end date for the training data
     start = datetime(2012, 1, 1)
@@ -145,6 +146,7 @@ if __name__ == "__main__":
                 else:
                     print("{} Failed, not enough datapoints {}".format(symbol,f['Adj Close'].count()))
             except:
+                print("Something went wrong with {}".format(symbol))
                 pass
         data = pd.concat(datasets)
         table = data.pivot(columns='ticker')
