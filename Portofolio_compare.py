@@ -9,13 +9,13 @@ import os
 import itertools
 
 
-symbols = ['ARGX.BR', 'BAR.BR', 'GLPG.AS', 'UMI.BR', 'WDP.BR']
-weights = [0.21860023, 0.11065033, 0.18923859, 0.35871712, 0.12279372]
+symbols = ['IRPC.BK', 'KTC.BK', 'ORI.BK', 'RS.BK', 'TFG.BK']
+weights = [0.27329778528836024, 0.22622808913118347, 0.3172835831004925, 0.010000000000000009, 0.17319054247996385]
 
-indexReference = "^BFX"
+indexReference = "^SET50.BK"
 
 start = datetime(2018, 1, 1)
-end = datetime(2018, 12, 31)
+end = datetime.now()
 
 datasets = []
 for symbol in symbols:
@@ -25,7 +25,7 @@ for symbol in symbols:
             f['ticker']=np.full(f['Adj Close'].count(),symbol)
             f=f.drop(["High","Low","Open","Volume","Close"],axis=1)
             print("Fetched {}".format(f.shape))
-            if f['Adj Close'].count() >=250:
+            if f['Adj Close'].count() >=240:
                 datasets.append(f)
         except:
             print("Error:{}".format(symbol))
@@ -35,12 +35,20 @@ table = data.pivot(columns='ticker')
 
 
 
-f = web.DataReader(indexReference, 'yahoo',  start, end)
-f['ticker']=np.full(f['Adj Close'].count(),indexReference)
-indexData=f.drop(["High","Low","Open","Volume","Close"],axis=1)
+#f = web.DataReader(indexReference, 'yahoo',  datetime(2018, 1, 1), end)
+#f['ticker']=np.full(f['Adj Close'].count(),indexReference)
+#indexData=f.drop(["High","Low","Open","Volume","Close"],axis=1)
+#tableIndex = indexData.pivot(columns='ticker')
+
+f = pd.read_csv('/home/robin/MPT/SET50_Historical_Data_20180101_20190601.csv')
+f['ticker']=np.full(f['Price'].count(),indexReference)
+indexData=f.drop(["High","Low","Open","Vol.","Change %"],axis=1)
+indexData["Date"]= pd.to_datetime(indexData["Date"])
+indexData = indexData.set_index('Date')
 tableIndex = indexData.pivot(columns='ticker')
 
-#print(tableIndex)
+
+print(tableIndex)
 #get the first value of the indexReference at day One
 indexRefValue = tableIndex.iloc[0,0]
 shares = []
@@ -57,7 +65,7 @@ table['portfolio'] = sum(table[col]*shares[symbols.index(col[1])] for col in tab
 
 plt.style.use('seaborn-dark')
 ax = table.plot.line(y='portfolio',c='red', figsize=(10, 8), grid=True)
-tableIndex.plot.line(y='Adj Close', c='blue', ax=ax)
+tableIndex.plot.line(y='Price', c='blue', ax=ax)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Index Comparison')

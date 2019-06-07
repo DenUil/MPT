@@ -2,14 +2,13 @@ from multiprocessing import Process, Queue, Manager
 from scipy.optimize import minimize
 import pandas_datareader.data as web
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
-import os
 import itertools
 import time
 from operator import itemgetter
 from dateutil.relativedelta import *
+import math
 
 def computeDataPoints(weights,returns_annual, cov_annual):
     returns = np.dot(weights, returns_annual)
@@ -117,13 +116,13 @@ if __name__ == "__main__":
     end = datetime(2017, 12, 31)
 
     #number of threads to start
-    num_threads = 8
+    num_threads = 24
 
     #Fetch data
     table = None
 
     numberOfMonthsPerExpands = 12
-    numberOfExpandsPerYear = 12/numberOfMonthsPerExpands
+    numberOfExpandsPerYear = math.floor(12/numberOfMonthsPerExpands)
     for it in range(0,numberOfExpandsPerYear):
 
         startTrainingData = start.strftime("%m/%d/%Y")
