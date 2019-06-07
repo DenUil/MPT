@@ -28,12 +28,18 @@ def sharpeRatio(weights, *args):
 def constraint1(weights):
     return weights.sum() - 1
 
-def minimizerThread(q, threadIndex):
+def minimizerThread(q, threadIndex, table, resultList):
     while q.empty():
         time.sleep(0.5)
-
+    maxResult = (0,0,0,0,0)
     while not q.empty():
-        resIndex, resultList, tickers, newTable = q.get()
+        tickers = q.get()
+
+        cIndex = []
+        for co in tickers:
+            cIndex.append(table.columns.get_loc(co))
+        newTable = table.iloc[:, cIndex]
+
         #if q.qsize() % 100 == 0 :
         #    print("Thread{} - Processing #{} of Queue{} length: {}".format(threadIndex,resIndex,threadIndex,q.qsize()))
         num_assets = len(tickers)
@@ -69,10 +75,13 @@ def minimizerThread(q, threadIndex):
         returns, volatility, sharpe = computeDataPoints(final_weights, returns_annual, cov_annual)
 
         #put data in resultlist
-        resultList[resIndex]=(tickers,final_weights,returns,volatility,sharpe)
+        if(sharpe > maxResult[4]):
+            maxResult=(tickers,final_weights,returns,volatility,sharpe)
 
         #mark task as done
         #q.task_done()
+
+    resultList[threadIndex] = maxResult
 
 
 
@@ -153,60 +162,63 @@ if __name__ == "__main__":
         table = data.pivot(columns='ticker')
         table.to_pickle("yahooDataSet.pkl")
         table.columns = table.columns.droplevel()
+        for col in table.columns:
+            table.rename(columns={col: col.replace(".", "_")}, inplace=True)
         #dealing with NaN situation
         table.fillna(method='ffill')
         table.fillna(method='bfill')
 
 
         #build all combinations of 5 equities
+        print("Building combinations of tickers")
         symbolCombinations = itertools.combinations(table.columns, 5)
 
 
         #create new queue
+        #initialisation of the result list
+        manager = Manager()
         Queues = []
+        resultList = manager.list()
         for i in range(num_threads):
+            resultList.append(None)
             Queues.append(Queue(maxsize=0))
 
 
 
-        #initialisation of the result list
-        manager = Manager()
 
-        resultList = manager.list()
+
+
 
         queueIndex = 0
         #loop through all symbol combinations we generated
-        for c, comb in enumerate(symbolCombinations):
-            comb2 = list(comb)
-            cIndex = []
-            for co in comb2:
-                cIndex.append(table.columns.get_loc(co))
-            #Create a subset of the training data that just has the equities in the combination
-            newTable = table.iloc[:, cIndex]
-            num_assets = len(comb2)
-            #make a spot available in the result list for the result data
-            resultList.append(None)
+        for comb in symbolCombinations:
             #Create the queue
-
-            Queues[queueIndex].put((c,resultList,comb2,newTable))
+            Queues[queueIndex].put(comb)
             queueIndex =queueIndex+1
             if(queueIndex==num_threads):
                 queueIndex = 0
 
-        print("Collected {} portfolio combinations to optimize...".format(len(resultList)))
+
+
+
+
+
         # Start the threads; they will wait until they get data via the queue
         threads = []
         for i in range(num_threads):
-            worker = Process(target=minimizerThread, args=(Queues[i],i))
+            worker = Process(target=minimizerThread, args=(Queues[i], i, table, resultList))
             worker.start()
             threads.append(worker)
 
         print("Waiting for data to be processed by our multiprocessing system...")
 
+
+
         #wait untill all threads are done
         for worker in threads:
             worker.join()
 
+       # take the best of all the threads
         resultListClean = [x if x != None else [0,0,0,0,0] for x in resultList]
         try:
             optimalPortfolio = max(resultListClean,key=itemgetter(4))
