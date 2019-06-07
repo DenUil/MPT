@@ -10,6 +10,7 @@ import itertools
 import time
 from operator import itemgetter
 from dateutil.relativedelta import *
+import math
 
 def computeDataPoints(weights,returns_annual, cov_annual):
     returns = np.dot(weights, returns_annual)
@@ -110,20 +111,20 @@ if __name__ == "__main__":
                     "WDP.BR"]
 
     symbolsSET50 = ['SUPER.BK','TRITN.BK','TPIPL.BK','MAX.BK','NUSA.BK','TFG.BK','EVER.BK','AQUA.BK','PF.BK','BLAND.BK','EFORL.BK','SIRI.BK','JSP.BK','BEM.BK','UPA.BK','KTC.BK','JAS.BK','PSTC.BK','CGD.BK','ML.BK','GEL.BK','MACO.BK','WHA.BK','RML.BK','RWI.BK','NMG.BK','TMB.BK','ACC.BK','SGP.BK','TRUE.BK','IRPC.BK','QH.BK','IEC.BK','RS.BK','TWZ.BK','T.BK','GUNKUL.BK','ORI.BK','CHG.BK','ANAN.BK','BSM.BK','TRC.BK','CHO.BK','SPALI.BK','BWG.BK','ITD.BK','TPIPP.BK','NEWS.BK','STPI.BK','NWR.BK']
-    symbols = symbolsSET50
+    symbols = symbolsSET50[:42]
 
     #start and end date for the training data
-    start = datetime(2012, 1, 1)
+    start = datetime(2015, 1, 1)
     end = datetime(2017, 12, 31)
 
     #number of threads to start
-    num_threads = 8
+    num_threads = 16
 
     #Fetch data
     table = None
 
     numberOfMonthsPerExpands = 12
-    numberOfExpandsPerYear = 12/numberOfMonthsPerExpands
+    numberOfExpandsPerYear = math.floor(12/numberOfMonthsPerExpands)
     for _ in range(0,numberOfExpandsPerYear):
 
         startTrainingData = start.strftime("%m/%d/%Y")
@@ -141,7 +142,7 @@ if __name__ == "__main__":
                 f = web.DataReader(symbol, 'yahoo', start, end)
                 f['ticker'] = np.full(f['Adj Close'].count(), symbol)
                 f = f.drop(["High", "Low", "Open", "Volume", "Close"], axis=1)
-                if f['Adj Close'].count() >= 1250:
+                if f['Adj Close'].count() >= 500:
                     datasets.append(f)
                 else:
                     print("{} Failed, not enough datapoints {}".format(symbol,f['Adj Close'].count()))
